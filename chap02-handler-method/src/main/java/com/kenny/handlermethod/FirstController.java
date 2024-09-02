@@ -2,16 +2,15 @@ package com.kenny.handlermethod;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Map;
 
 @Controller
 @RequestMapping("/first/*")
+@SessionAttributes("id")
 public class FirstController {
 
     // GET /first/regist 요청
@@ -97,6 +96,61 @@ public class FirstController {
     @GetMapping("/search")
     public void search(Model model) {
 
+    }
+
+    /* 3. @ModelAttribute를 이용하는 방법
+     * DTO 같은 모델을 커맨드 객체로 전달받는 어노테이션으로, Model에 담기는 작업도 자동으로 일어난다.
+     * 단 @ModelAttribute("key")를 지정하지 않으면 타입이 앞글자를 소문자로 하여 저장된다. 어노테이션 생략도 가능하다. */
+    @PostMapping("/search")
+    public String searchMenu(@ModelAttribute("menu") MenuDTO menu) {
+
+        return "first/searchResult";
+    }
+
+    @GetMapping("/login")
+    public void login() {
+
+    }
+
+    /* 4. @SessionAttributes <- 클래스 레벨에 작성
+     * HttpSession을 전달받는 것도 가능하지만 Servlet에 종속적이므로 Spring에서 제공하는 기능을 사용하는 것을 권장한다.
+     * 클래스 레벨에 @SessionAttribytes("모델에 담을 key 값") 과 같이 지정하면
+     * Model에 해당 key가 추가될 때 Session에도 자동으로 등록된다. */
+    // 원래는 request Scope에서 다루는 영역이지만, session 영역에서 다루겠다.
+
+    // 서블릿에서 세션을 쓰려면, req.getSession()로 HttpSession을 반환받음.
+    // 여기서도 HttpSession을 쓸 수는 있으나 권장 x
+    @PostMapping("/login")
+    public String loginTest(String id, Model model) {
+
+        model.addAttribute("id", id);
+
+        return "/first/loginResult";
+    }
+
+    /* @SessionAttribute로 등록된 값은 SessionStatus (세션의 상태를 관리하는 객체)의 setComplete() 메소드를 호출하여
+     * 사용을 만료시킨다. (HttpSession을 통한 session.invalidate() 메소든느 동작하지 않는다.) */
+    @GetMapping("/logout")
+    public String logout(SessionStatus status) {
+        status.setComplete();
+
+        return "first/loginResult";
+    }
+
+    @GetMapping("/body")
+    public void body() {
+    }
+
+    // 핸들러의 매개변수부에 사용할 수 있는 것이 무엇인지 안다.
+    @PostMapping("/body")
+    public void bodyTest(
+            @RequestBody String body,
+            @RequestHeader("content-type") String contentType,
+            @CookieValue("JSESSIONID") String sessionId
+    ) {
+        System.out.println("body: " + body);
+        System.out.println("contentType: " + contentType);
+        System.out.println("sessionId: " + sessionId);
     }
 }
 

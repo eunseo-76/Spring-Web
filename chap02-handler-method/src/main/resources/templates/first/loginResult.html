@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>loginResult</title>
+</head>
+<body>
+    <h1>Session에 담긴 값 확인</h1>
+    <h3 th:text="|${session.id}님 환영합니다.|"></h3>
+    <!-- ${message} 대신 session이라는 영역에서 id를 추출하겠다는 의미. thymeleaf 문법.
+    | 는 변수와 문자열을 하나의 문자열로 합쳐준다.-->
+    <button onclick="location.href='logout'">로그아웃</button>
+</body>
+</html>
