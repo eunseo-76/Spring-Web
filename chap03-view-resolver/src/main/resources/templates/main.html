@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+</head>
+<body>
+    <h1>view resolver 테스트</h1>
+
+    <h3>문자열로 뷰 이름 반환하기</h3>
+    <button onclick="location.href='string'">문자열로 뷰 이름 반환</button>
+
+    <h3>문자열로 redirect 하기</h3>
+    <button onclick="location.href='string-redirect'">문자열로 redirect</button>
+
+    <h3>문자열로 redirect  & flash Attribute 하기</h3>
+    <button onclick="location.href='string-redirect-attr'">문자열로 redirect & flash Attribute</button>
+
+    <script>
+        const flashMessage1 = `[[${flashMessage1}]]`;
+        if(flashMessage1) alert(flashMessage1); <!-- alert가 뜨면 redirect 되었을 때 해당 데이터가 보존된다는 의미 -->
+    </script>
+
+    <h3>ModelAndView 로 뷰 이름 반환하기</h3>
+    <button onclick="location.href='modelandview'">ModelAndView로 뷰 이름 반환</button>
+
+
+</body>
+</html>
